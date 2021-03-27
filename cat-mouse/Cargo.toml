@@ -1,0 +1,15 @@
+[package]
+name = "vcs-classic-hid-cat-mouse"
+publish = false
+version = "0.1.0"
+authors = ["Eduardo Pinho <enet4mikeenet@gmail.com>"]
+edition = "2018"
+
+[features]
+simulator = ["macroquad", "vcs-classic-hid-simulator"]
+
+[dependencies]
+macroquad = { version = "0.3.0-alpha.15", optional = true }
+rand = "0.8.3"
+vcs-classic-hid = { path = "../vcs-classic-hid/" }
+vcs-classic-hid-simulator = { path = "../simulator/", optional = true }

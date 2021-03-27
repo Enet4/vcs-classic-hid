@@ -1,0 +1,9 @@
+[package]
+name = "vcs-classic-hid-simulator"
+version = "0.1.0"
+authors = ["Eduardo Pinho <enet4mikeenet@gmail.com>"]
+edition = "2018"
+
+
+[dependencies]
+vcs-classic-hid = { path = "../vcs-classic-hid/" }
