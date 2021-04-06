@@ -239,7 +239,7 @@ where
 
     fn anim_simon(choice: Choice) -> Asr {
         let selection = Self::led_select_direction(choice);
-        Asr::new_with_params(selection, 0xFF, 5, 30, 8)
+        Asr::new_with_params(selection, 0xFF, 5, 28, 8)
     }
 
     fn update_idle(&mut self, mut device: &mut D, ticks: u64) -> Result<GameEvent, D::Error> {
@@ -257,7 +257,7 @@ where
         // do some silly animation, wait for menu button press
         let mut report = LedReport::new();
 
-        let c = match (ticks / 50) % 4 {
+        let c = match (ticks / 48) % 4 {
             0 => Choice::Up,
             1 => Choice::Right,
             2 => Choice::Down,
@@ -265,7 +265,7 @@ where
             _ => unreachable!(),
         };
 
-        Self::anim_simon(c).update(ticks % 50, &mut report);
+        Self::anim_simon(c).update(ticks % 48, &mut report);
 
         report.send(device)?;
         Ok(GameEvent::Running)
