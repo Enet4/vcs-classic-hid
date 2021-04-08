@@ -1,10 +1,10 @@
 # VCS Classic HID
 
-[![Latest Version](https://img.shields.io/crates/v/vcs-classic-hid.svg)](https://crates.io/crates/vcs-classic-hid) [![Build Status](https://travis-ci.org/Enet4/vcs-classic-hid-rs.svg?branch=master)](https://travis-ci.org/Enet4/vcs-classic-hid) [![dependency status](https://deps.rs/repo/github/Enet4/vcs-classic-hid-rs/status.svg)](https://deps.rs/repo/github/Enet4/vcs-classic-hid)
+[![Latest Version](https://img.shields.io/crates/v/vcs-classic-hid.svg)](https://crates.io/crates/vcs-classic-hid) [![dependency status](https://deps.rs/repo/github/Enet4/vcs-classic-hid-rs/status.svg)](https://deps.rs/repo/github/Enet4/vcs-classic-hid)
 
 A specialized library for access to the Atari VCS Classic Controller.
 
-This crate uses the [hidapi](https://crates.io/crates/hidapi)
+This crate uses [hidapi](https://crates.io/crates/hidapi)
 for finding connected VCS classic controllers and opening HID access to them.
 With this crate, an assortment of facilities are provided
 for reading the current state of the device and,
