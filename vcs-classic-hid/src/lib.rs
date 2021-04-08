@@ -1,7 +1,95 @@
-//! VCS Classic HID library
+//! VCS Classic Joystick HID library.
 //!
+//! This crate uses `hidapi`
+//! for finding and using Atari VCS classic joysticks.
+//!
+//! With this crate, an assortment of facilities are provided
+//! for reading the current state of the device and,
+//! more importantly, send force feedback and LED manipulation messages.
+//!
+//! ## Finding a device
+//!
+//! The functions [open], [open_serial], and [open_all]
+//! are helper functions for opening devices for access to a classic controller
+//! via [`hidapi`](hidapi).
+//! The result provides an [`HidDevice`](hidapi::HidDevice).
+//!
+//! ```no_run
+//! # fn main() -> Result<(), hidapi::HidError> {
+//! let device = vcs_classic_hid::open()?;
+//! # Ok(())
+//! # }
+//! ```
+//!
+//! ## Using the device
+//!
+//! Raw access to the HID device can still be done
+//! through the interface provided,
+//! but a set of facilities are provided through
+//! the implemented [`Device`] trait
+//! and additional functions and data types.
+//!
+//! ### Receiving input state
+//!
+//! A [State] value represents a possible input state
+//! of the classic controller,
+//! and can be created from a device report via
+//! [`State::from_report`](crate::State::from_report).
+//! However, this is not very convenient, and may return stale input
+//!
+//! The function [process_input] handles all input state events in queue
+//! and returns a `State` instance.
+//!
+//! ```no_run
+//! # fn main() -> Result<(), hidapi::HidError> {
+//! let mut device = vcs_classic_hid::open()?;
+//! match vcs_classic_hid::process_input(&mut device)? {
+//!     Some(state) => {
+//!         // use state
+//!         let _fuji_button_down = state.button_fuji;
+//!     }
+//!     None => {
+//!         // no user input
+//!     }
+//! }
+//! # Ok(())
+//! # }
+//! ```
 //! 
-
+//! ### Changing LED state
+//!
+//! Both the light on the Fuji button and the ring of 24 LEDs
+//! can be manipulated programmatically.
+//! To set an exact state of the LEDs,
+//! create an [`LedReport`] and send it to the device.
+//!
+//! For example, to light up all LEDs in the controller's ring to the maximum:
+//!
+//! ```no_run
+//! use vcs_classic_hid::Device;
+//! 
+//! # fn main() -> Result<(), hidapi::HidError> {
+//! # let mut device = vcs_classic_hid::open()?;
+//! let led = vcs_classic_hid::LedReport::filled(0xFF);
+//! Device::write(&mut device, led)?;
+//! # Ok(())
+//! # }
+//! ```
+//!
+//! To cancel LED manipulation and let the controller itself manipulate them
+//! based on user input
+//! (which is the default behavior), use [`reset_leds`](Device::reset_leds):
+//!
+//! ```no_run
+//! use vcs_classic_hid::Device;
+//! 
+//! # fn main() -> Result<(), hidapi::HidError> {
+//! # let mut device = vcs_classic_hid::open()?;
+//! device.reset_leds()?;
+//! # Ok(())
+//! # }
+//! ```
+//!
 use std::ffi::CStr;
 
 pub use hidapi;
@@ -13,7 +101,7 @@ pub mod input;
 
 pub use force_feedback::FfReport;
 pub use led::LedReport;
-pub use input::process_input;
+pub use input::{State, StickPosition, process_input};
 
 /// Generic interface for human interaction devices.
 pub trait Device {

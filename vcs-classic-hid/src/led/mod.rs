@@ -4,10 +4,12 @@ use crate::Device;
 
 /// A behavioral construct for effects and animations on the controller's LEDs.
 ///
+/// This abstraction enables operations on the LEDs to be accumulated
+/// in an additive fashion, and to easily change over time.
 pub trait LedAnimation {
-    /// Reset the effect's state. This generally means a rewind.
-    /// Generally, the state of the animation
-    /// should always be the same after this call.
+    /// Reset the effect's state. This usually means a rewind of the animation.
+    /// The state of the animation
+    /// should consider `ticks` as the initial "timestamp".
     ///
     /// In stateless animations,
     /// this function serves no purpose and should be a no-op.
@@ -17,7 +19,11 @@ pub trait LedAnimation {
     /// Update the state of the animation,
     /// applying the intended effects on the given report.
     ///
-    /// Returns `Ended` if the animation ends
+    /// `ticks` is expected to be a steadily increasing number
+    /// representing how much time has passed since the beginning
+    /// of a program or subroutine to which the animation applies.
+    /// 
+    /// Returns `Ended` if the animation has ended
     /// and no longer wishes to request for LED activations.
     fn update(&mut self, ticks: u64, report: &mut LedReport) -> AnimationEvent;
 }
@@ -46,7 +52,7 @@ impl Quadrant {
     }
 }
 
-/// A selection of leds in the ring.
+/// An arbitrary selection of leds in the ring.
 #[derive(Debug, Default, Copy, Clone, Eq, Hash, PartialEq)]
 #[repr(transparent)]
 pub struct LedSelection([bool; 24]);
@@ -117,6 +123,15 @@ impl LedSelection {
         LedSelection(x)
     }
 
+    /// Intersect (filter) with another selection.
+    pub fn and(self, other: LedSelection) -> Self {
+        let mut x = [false; 24];
+        for (out, (v1, v2)) in x.iter_mut().zip(self.0.iter().zip(other.0.iter())) {
+            *out = *v1 && *v2;
+        }
+        LedSelection(x)
+    }
+    
     /// Select all LEDs.
     pub const ALL: LedSelection = LedSelection([true; 24]);
 
@@ -209,7 +224,9 @@ impl LedReport {
 
     /// Add an intensity to a LED in the ring.
     ///
-    /// Values are automatically clamped.
+    /// The addition is relative to the receiving report value,
+    /// and not the current state of the LEDs in the controller.
+    /// Values are automatically clamped to the limits of the device.
     #[inline]
     pub fn saturating_add(&mut self, led: u8, value_delta: i16) {
         let led = led as usize;
@@ -219,6 +236,10 @@ impl LedReport {
     }
 
     /// Add an intensity to a selection of LEDs in the ring.
+    ///
+    /// The addition is relative to the receiving report value,
+    /// and not the current state of the LEDs in the controller.
+    /// Values are automatically clamped to the limits of the device.
     #[inline]
     pub fn saturating_add_selection(&mut self, selection: LedSelection, value_delta: i16) {
         selection
@@ -250,6 +271,7 @@ impl AsRef<[u8]> for LedReport {
     }
 }
 
+/// Feedback from an LED animation regarding its current state after an update.
 #[derive(Debug, Copy, Clone, Eq, Hash, PartialEq)]
 pub enum AnimationEvent {
     /// the animation is running
@@ -259,6 +281,7 @@ pub enum AnimationEvent {
 }
 
 impl Default for AnimationEvent {
+    #[inline]
     fn default() -> Self {
         AnimationEvent::Running
     }

@@ -1,7 +1,7 @@
 [workspace]
 members = [
+    "vcs-classic-hid",
     "cat-mouse",
     "simon",
-    "simulator",
-    "vcs-classic-hid"
+    "simulator"
 ]

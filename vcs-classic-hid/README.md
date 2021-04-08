@@ -5,7 +5,7 @@
 A specialized library for access to the Atari VCS Classic Controller.
 
 This crate uses the [hidapi](https://crates.io/crates/hidapi)
-for finding the device and opening HID access to them.
+for finding connected VCS classic controllers and opening HID access to them.
 With this crate, an assortment of facilities are provided
 for reading the current state of the device and,
 more importantly, send force feedback and LED manipulation messages.
@@ -20,27 +20,27 @@ cargo build --release -p vcs-classic-hid
 
 ## Using
 
-Light up your controller:
+To light up all LEDs in the controller's ring to the maximum:
 
 ```rust
-let device = vcs_classic_hid::open()?;
+let mut device = vcs_classic_hid::open()?;
 device.send(vcs_classic_hid::LedReport::filled(0xFF))?;
 ```
 
 Apply some force feedback three times:
 
 ```rust
-let device = vcs_classic_hid::open()?;
+let mut device = vcs_classic_hid::open()?;
 device.send(vcs_classic_hid::FfReport::new_with_params(
     0xA0, 30, 30, 3
 ))?;
 ```
 
-Please see the documentation for more details.
+Please see the crate documentation for more details.
 
 **Cargo features:**
 
-- `linux-hidraw` (Linux only): use HIDRAW to access the controller
+- `linux-hidraw` (Linux only): use HIDRAW to access the controller, recommended
 - `linux-libusb` (Linux only): access the controller via libusb
 
 ## License and Warning Note
@@ -73,4 +73,4 @@ regardless of which capabilities from the library are used.
 As defined by the aforementioned license,
 authors and contributors to `vcs-classic-hid` and/or associated programs
 cannot be held liable for any damage
-which may occur from the use of this software.
+which may occur from direct or indirect use of this software.

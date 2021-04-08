@@ -47,7 +47,7 @@ impl StickPosition {
 }
 
 /// A friendly representation of a game controller input state.
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Debug, Default, Copy, Clone, PartialEq)]
 pub struct State {
     /// The position of the stick
     pub stick_position: StickPosition,
@@ -59,7 +59,7 @@ pub struct State {
     pub button_back: bool,
     /// Whether the menu/context button is down
     pub button_menu: bool,
-    /// Whether the Atari button is down
+    /// Whether the Fuji (Atari) button is down
     pub button_fuji: bool,
     /// The absolute position of the rotational paddle,
     /// as a number between 0 and 1023
@@ -67,26 +67,6 @@ pub struct State {
 }
 
 impl State {
-
-    /// Obtain the controller's state 
-    /// by reading the next controller state report.
-    ///
-    /// This is not fully recommended because
-    /// if many more events are on queue,
-    /// the obtained state may be stale.
-    ///
-    /// This function may panic if the device is
-    /// not an Atari VCS classic controller.
-    pub fn from_device<D>(mut device: D) -> Result<Self, D::Error>
-    where
-        D: Device,
-    {
-        let mut buf = [0; 6];
-        buf[0] = 1;
-        device.read(&mut buf)?;
-
-        Ok(Self::from_report(&buf))
-    }
 
     /// Obtain the controller's state from the full report packet.
     ///

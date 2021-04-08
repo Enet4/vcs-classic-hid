@@ -1,4 +1,32 @@
 //! Animation abstraction for LEDs
+//!
+//! This module contains implementations for animations
+//! that can be applied to the LED.
+//!
+//! For any of these to work, a steady event loop is required.
+//!
+//! ## Example
+//!
+//! ```no_run
+//! # fn main() -> Result<(), hidapi::HidError> {
+//! use std::time::Duration;
+//! use vcs_classic_hid::{Device, LedReport, open};
+//! use vcs_classic_hid::led::LedAnimation;
+//!
+//! let mut device = open()?;
+//! let mut ticks = 0;
+//! let mut animation = vcs_classic_hid::led::anims::RotatingLed;
+//! loop {
+//!     let mut report = LedReport::new();
+//!     animation.update(ticks, &mut report);
+//!     Device::write(&mut device, report)?;
+//!
+//!     ticks += 1;
+//!     std::thread::sleep(Duration::from_millis(25)); // ~ 50 FPS
+//! }
+//! # Ok(())
+//! # }
+//! ```
 use super::{AnimationEvent, LedAnimation, LedReport, LedSelection};
 
 #[derive(Debug)]
