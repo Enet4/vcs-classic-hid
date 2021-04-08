@@ -5,7 +5,7 @@
 A specialized library for access to the Atari VCS Classic Controller.
 
 This crate uses the [hidapi](https://crates.io/crates/hidapi)
-for finding the device and opening HID access to them.
+for finding connected VCS classic joysticks and opening HID access to them.
 With this crate, an assortment of facilities are provided
 for reading the current state of the device and,
 more importantly, send force feedback and LED manipulation messages.
@@ -29,6 +29,13 @@ You will also find examples of use in the following folders:
 
 - [simon](simon): the classic game of Simon Says!
 - [cat-mouse](cat-mouse): a game of cat and mouse; catch the cheese while avoiding the cat!
+
+To run an example program:
+
+```sh
+cargo run --release --bin vcs-classic-hid-cat-mouse
+cargo run --release --bin vcs-classic-hid-simon
+```
 
 ## License and Warning Note
 

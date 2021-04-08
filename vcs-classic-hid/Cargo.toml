@@ -3,8 +3,12 @@ name = "vcs-classic-hid"
 version = "0.1.0"
 authors = ["Eduardo Pinho <enet4mikeenet@gmail.com>"]
 edition = "2018"
-description = "Custom access drivers for the Atari VCS classic controller"
-keywords = ["atari-vcs", "atari", "vcs", "controller", "gamepad"]
+description = "Custom drivers for the Atari VCS classic joystick"
+keywords = ["atari-vcs", "atari", "vcs", "joystick", "controller", "gamepad"]
+categories = ["hardware-support", "game-development"]
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/Enet4/vcs-classic-hid"
 
 [features]
 default = ["linux-static-hidraw"]
