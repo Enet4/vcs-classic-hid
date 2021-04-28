@@ -4,6 +4,8 @@
 
 A specialized library for access to the Atari VCS Classic Controller.
 
+Check out a showcase video of the library in action [here](https://www.youtube.com/watch?v=bpBjXCxH0Sw).
+
 This crate uses the [hidapi](https://crates.io/crates/hidapi)
 for finding connected VCS classic joysticks and opening HID access to them.
 With this crate, an assortment of facilities are provided
