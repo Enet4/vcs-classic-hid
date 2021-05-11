@@ -3,8 +3,6 @@
 use crate::Device;
 
 /// Identifier for the position of the controller's stick.
-///
-/// They can be used 
 #[derive(Debug, Copy, Clone, Eq, Hash, PartialEq)]
 #[repr(u8)]
 pub enum StickPosition {
