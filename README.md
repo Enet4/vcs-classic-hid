@@ -1,8 +1,10 @@
 # VCS Classic HID
 
-[![Latest Version](https://img.shields.io/crates/v/vcs-classic-hid.svg)](https://crates.io/crates/vcs-classic-hid) [![dependency status](https://deps.rs/repo/github/Enet4/vcs-classic-hid-rs/status.svg)](https://deps.rs/repo/github/Enet4/vcs-classic-hid)
+[![Latest Version](https://img.shields.io/crates/v/vcs-classic-hid.svg)](https://crates.io/crates/vcs-classic-hid) [![dependency status](https://deps.rs/repo/github/Enet4/vcs-classic-hid/status.svg)](https://deps.rs/repo/github/Enet4/vcs-classic-hid)
 
 A specialized library for access to the Atari VCS Classic Controller.
+
+Check out a showcase video of the library in action [here](https://www.youtube.com/watch?v=bpBjXCxH0Sw).
 
 This crate uses the [hidapi](https://crates.io/crates/hidapi)
 for finding connected VCS classic joysticks and opening HID access to them.
