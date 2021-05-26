@@ -1,0 +1,18 @@
+[package]
+name = "vcs-classic-hid-audio-monitor"
+publish = false
+version = "0.1.0"
+authors = ["Eduardo Pinho <enet4mikeenet@gmail.com>"]
+edition = "2018"
+
+[features]
+jack = []
+
+[dependencies]
+anyhow = "1.0.40"
+clap = "2.33.3"
+cpal = "0.13.3"
+hound = "3.4.0"
+num = "0.4.0"
+spectrum-analyzer = "0.5.2"
+vcs-classic-hid = { path = "../vcs-classic-hid/" }

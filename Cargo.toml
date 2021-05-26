@@ -1,5 +1,6 @@
 [workspace]
 members = [
+    "audio-monitor",
     "vcs-classic-hid",
     "cat-mouse",
     "simon",

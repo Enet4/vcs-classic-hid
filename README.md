@@ -31,12 +31,14 @@ You will also find examples of use in the following folders:
 
 - [simon](simon): the classic game of Simon Says!
 - [cat-mouse](cat-mouse): a game of cat and mouse; catch the cheese while avoiding the cat!
+- [audio-monitor](audio-monitor): show audio feedback on the joystick's LEDs!
 
 To run an example program:
 
 ```sh
 cargo run --release --bin vcs-classic-hid-cat-mouse
 cargo run --release --bin vcs-classic-hid-simon
+cargo run --release --bin vcs-classic-hid-audio-monitor
 ```
 
 ## License and Warning Note
