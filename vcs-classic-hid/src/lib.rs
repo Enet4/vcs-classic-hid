@@ -103,6 +103,8 @@ pub use force_feedback::FfReport;
 pub use led::LedReport;
 pub use input::{State, StickPosition, process_input};
 
+pub mod ffi;
+
 /// Generic interface for human interaction devices.
 pub trait Device {
     /// The type used for errors
