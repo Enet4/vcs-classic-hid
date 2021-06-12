@@ -199,9 +199,7 @@ pub fn open_path(device_path: &CStr) -> Result<hidapi::HidDevice, hidapi::HidErr
 }
 
 //// Inspect the list of devices available
-/// and open a classic controller device by path.
-///
-/// Open a classic controller device by serial number.
+/// and open a classic controller device by serial number.
 pub fn open_serial(sn: &str) -> Result<hidapi::HidDevice, hidapi::HidError> {
     let api = HidApi::new()?;
     api.open_serial(VENDOR_ID, PRODUCT_ID, sn)
