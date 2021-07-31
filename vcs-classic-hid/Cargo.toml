@@ -10,11 +10,17 @@ license = "MIT OR Apache-2.0"
 readme = "README.md"
 repository = "https://github.com/Enet4/vcs-classic-hid"
 
+[lib]
+crate-type = ["lib", "dylib"]
+
 [features]
 default = ["linux-static-hidraw"]
 
 linux-static-hidraw = ["hidapi/linux-static-hidraw"]
 linux-static-libusb = ["hidapi/linux-static-libusb"]
+
+[dependencies]
+libc = "0.2.97"
 
 [dependencies.hidapi]
 version = "1.2.5"

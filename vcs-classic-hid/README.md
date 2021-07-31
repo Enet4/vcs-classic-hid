@@ -2,7 +2,7 @@
 
 [![Latest Version](https://img.shields.io/crates/v/vcs-classic-hid.svg)](https://crates.io/crates/vcs-classic-hid) [![dependency status](https://deps.rs/repo/github/Enet4/vcs-classic-hid-rs/status.svg)](https://deps.rs/repo/github/Enet4/vcs-classic-hid)
 
-A specialized library for access to the Atari VCS Classic Controller.
+A specialized library for access to the Atari VCS Classic Joystick.
 
 This crate uses [hidapi](https://crates.io/crates/hidapi)
 for finding connected VCS classic controllers and opening HID access to them.
@@ -42,6 +42,13 @@ Please see the crate documentation for more details.
 
 - `linux-hidraw` (Linux only): use HIDRAW to access the controller, recommended
 - `linux-libusb` (Linux only): access the controller via libusb
+
+## Foreign Function Interface (FFI)
+
+By default, building this library will also provide a shared object,
+which implements the C API defined in [vcs-classic-hid](vcs-classic-hid.h).
+This enables the use of this library through other programming languages.
+Please see [ffi-examples](ffi-examples) for an example in C.
 
 ## License and Warning Note
 

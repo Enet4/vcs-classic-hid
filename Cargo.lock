@@ -1191,6 +1191,7 @@ name = "vcs-classic-hid"
 version = "0.1.0"
 dependencies = [
  "hidapi",
+ "libc",
 ]
 
 [[package]]
