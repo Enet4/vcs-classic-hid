@@ -5,53 +5,28 @@
 use std::sync::{Arc, Mutex};
 
 use anyhow::{self, Context};
-use clap;
-use cpal;
+use clap::Parser;
 use spectrum_analyzer::{self, FrequencyLimit, FrequencySpectrum, samples_fft_to_spectrum, windows::hann_window};
 use vcs_classic_hid::{self, Device, LedReport, process_input};
 
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
-#[derive(Debug)]
-struct Opt {
+
+#[derive(Debug, Parser)]
+struct App {
+    /// The audio device to use
+    #[clap(default_value = "default")]
+    device: String,
     #[cfg(all(
         any(target_os = "linux", target_os = "dragonfly", target_os = "freebsd"),
         feature = "jack"
     ))]
+    /// Use the JACK host
+    #[clap(short = 'j', long = "--jack")]
     jack: bool,
-
-    device: String,
-}
-
-impl Opt {
-    fn from_args() -> Self {
-        let app = clap::App::new("beep").arg_from_usage("[DEVICE] 'The audio device to use'");
-        #[cfg(all(
-            any(target_os = "linux", target_os = "dragonfly", target_os = "freebsd"),
-            feature = "jack"
-        ))]
-        let app = app.arg_from_usage("-j, --jack 'Use the JACK host");
-        let matches = app.get_matches();
-        let device = matches.value_of("DEVICE").unwrap_or("default").to_string();
-
-        #[cfg(all(
-            any(target_os = "linux", target_os = "dragonfly", target_os = "freebsd"),
-            feature = "jack"
-        ))]
-        return Opt {
-            jack: matches.is_present("jack"),
-            device,
-        };
-
-        #[cfg(any(
-            not(any(target_os = "linux", target_os = "dragonfly", target_os = "freebsd")),
-            not(feature = "jack")
-        ))]
-        Opt { device }
-    }
 }
 
 fn main() -> Result<(), anyhow::Error> {
-    let opt = Opt::from_args();
+    let opt = App::parse();
 
     // Retrieve controller
     let joy = vcs_classic_hid::open().context("Could not open controller")?;
@@ -110,6 +85,7 @@ fn main() -> Result<(), anyhow::Error> {
             &config.into(),
             move |data, _: &_| handle_input_data_f32(data, joy1.clone()),
             err_fn,
+            None,
         )?,
         other => {
             panic!("Unsupported sample format {:?}", other);
@@ -148,18 +124,18 @@ where
     // apply hann window for smoothing; length must be a power of 2 for the FFT
     let hann_window = hann_window(&input[0..2048]);
     // calc spectrum
-    let spectrum_hann_window = samples_fft_to_spectrum(
+    let Ok(spectrum_hann_window) = samples_fft_to_spectrum(
         // (windowed) samples
         &hann_window,
         // sampling rate
         44100,
         // optional frequency limit: e.g. only interested in frequencies 50 <= f <= 150?
-        FrequencyLimit::Range(20., 15_000.),
+        FrequencyLimit::Range(20., 16_000.),
         // optional per element scaling function, e.g. `20 * log10(x)`; see doc comments
         None,
-        // optional total scaling at the end; see doc comments
-        None,
-    );
+    ) else {
+        return
+    };
 
     let mut led = LedReport::new();
 
